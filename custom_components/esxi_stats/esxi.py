@@ -2,7 +2,7 @@
 
 """ESXi commands for ESXi Stats component."""
 import logging
-from pyVim.connect import SmartConnect, SmartConnectNoSSL
+from pyVim.connect import SmartConnect, Disconnect
 from pyVmomi import vim, vmodl  # pylint: disable=no-name-in-module
 
 from .const import SUPPORTED_PRODUCTS
@@ -17,8 +17,8 @@ def esx_connect(host, user, pwd, port, ssl):
     try:
         # connect depending on SSL_VERIFY setting
         if ssl is False:
-            service_instance = SmartConnectNoSSL(
-                host=host, user=user, pwd=pwd, port=port
+            service_instance = SmartConnect(
+                host=host, user=user, pwd=pwd, port=port, disableSslCertValidation=True
             )
             current_session = service_instance.content.sessionManager.currentSession.key
             _LOGGER.debug("Logged in - session %s", current_session)
